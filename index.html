@@ -1,0 +1,538 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Affiliate Verification Portal – 10 Minute School</title>
+<meta name="description" content="Verify someone is an official 10 Minute School affiliate before making any payment or sharing personal information.">
+<meta name="theme-color" content="#E11D2E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#E11D2E; --red-600:#C8102E; --red-50:#FFF1F2; --red-100:#FFE1E4;
+  --green:#15803D; --green-500:#16A34A; --green-50:#F0FDF4; --green-100:#DCFCE7;
+  --ink:#0B1220; --ink-2:#334155; --muted:#64748B; --line:#E7EAF0; --bg:#F6F7FB; --card:#FFFFFF;
+  --bkash:#E2136E;
+  --r-lg:20px; --r-md:14px; --r-sm:10px;
+  --shadow:0 1px 2px rgba(16,24,40,.04),0 8px 24px -8px rgba(16,24,40,.10);
+  --shadow-lg:0 2px 4px rgba(16,24,40,.04),0 24px 48px -16px rgba(16,24,40,.18);
+  /* Poppins has no Bengali glyphs, so any Bangla text in English mode falls through to Anek Bangla. */
+  --font:'Poppins','Anek Bangla',system-ui,sans-serif;
+  --font-bn:'Anek Bangla','Poppins',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.55}
+body.bn{font-family:var(--font-bn);line-height:1.6}
+body.bn input,body.bn button{font-family:var(--font-bn)}
+a{color:inherit}
+button{font:inherit;cursor:pointer}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.85);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand img{width:38px;height:38px;object-fit:contain;border-radius:9px;border:1px solid var(--line);background:#fff;padding:3px}
+.brand b{font-size:15px;font-weight:700;letter-spacing:-.2px;font-family:var(--font)}
+.lang{display:flex;background:#F1F3F8;border-radius:999px;padding:3px;gap:2px}
+.lang button{border:0;background:transparent;padding:6px 14px;border-radius:999px;font-size:13px;font-weight:600;color:var(--muted)}
+.lang #l-en{font-family:var(--font)}
+.lang #l-bn{font-family:var(--font-bn)}
+.lang button[aria-pressed="true"]{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(16,24,40,.12)}
+
+/* hero */
+.hero{position:relative;overflow:hidden;padding:52px 0 36px}
+.hero::before{content:'';position:absolute;inset:-40% -10% auto -10%;height:520px;background:radial-gradient(60% 60% at 50% 30%,rgba(225,29,46,.12),transparent 70%);pointer-events:none}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1.05fr 1fr;grid-template-areas:"title form" "notice form";grid-template-rows:auto 1fr;column-gap:48px;align-items:start}
+.g-title{grid-area:title}
+.g-form{grid-area:form}
+.g-notice{grid-area:notice}
+h1{font-size:clamp(30px,4.4vw,46px);line-height:1.12;letter-spacing:-1px;font-weight:800;margin-bottom:14px}
+body.bn h1{letter-spacing:0;line-height:1.25}
+h1 em{font-style:normal;color:var(--red)}
+.lede{font-size:16px;color:var(--ink-2);max-width:470px}
+body.bn .lede{font-size:17px}
+
+.notice{margin-top:24px;background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);padding:18px 20px;box-shadow:var(--shadow)}
+.notice-top{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.notice-top i{width:8px;height:8px;border-radius:50%;background:var(--red)}
+.notice-top h2{font-size:15px;font-weight:700}
+.notice p{font-size:14px;color:var(--ink-2)}
+body.bn .notice p{font-size:15px}
+.warn{margin-top:12px;background:var(--red-50);border:1px solid var(--red-100);border-radius:var(--r-sm);padding:10px 12px;display:flex;gap:9px;align-items:flex-start}
+.warn svg{width:17px;height:17px;stroke:var(--red);stroke-width:2.2;fill:none;flex-shrink:0;margin-top:2px}
+.warn p{font-size:13.5px;font-weight:600;color:#9F1239}
+body.bn .warn p{font-size:14.5px}
+
+/* search card */
+.search{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-lg);padding:24px}
+.search h2{font-size:19px;font-weight:700;letter-spacing:-.3px;margin-bottom:16px}
+body.bn .search h2{font-size:21px;letter-spacing:0}
+.search label{display:block;font-size:11.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:7px}
+body.bn .search label{text-transform:none;letter-spacing:0;font-size:14px}
+.field{position:relative}
+.field input{width:100%;height:56px;border:1.5px solid var(--line);border-radius:var(--r-md);padding:0 44px 0 48px;font-size:17px;font-weight:600;font-family:var(--font);color:var(--ink);background:#FBFCFE;outline:none;transition:border-color .15s,box-shadow .15s,background .15s;letter-spacing:.4px}
+.field input::placeholder{color:#A0AABB;font-weight:400;letter-spacing:0}
+.field input:focus{border-color:var(--red);background:#fff;box-shadow:0 0 0 4px rgba(225,29,46,.12)}
+.field input.err{border-color:#DC2626;box-shadow:0 0 0 4px rgba(220,38,38,.10)}
+.field .ico{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:20px;height:20px;stroke:#94A3B8;stroke-width:2;fill:none;pointer-events:none}
+.field .clear{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:32px;height:32px;border-radius:8px;border:0;background:transparent;display:none;place-items:center;color:#94A3B8}
+.field .clear:hover{background:#F1F3F8}
+.field.has .clear{display:grid}
+.hint{min-height:22px;margin:8px 2px 14px;font-size:12.5px;color:var(--muted)}
+body.bn .hint{font-size:14px}
+.hint.bad{color:#B91C1C;font-weight:600}
+.btn{width:100%;height:54px;border:0;border-radius:var(--r-md);background:var(--red);color:#fff;font-size:16px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px -6px rgba(225,29,46,.55);transition:background .15s,transform .08s}
+body.bn .btn{font-size:17.5px}
+.btn:hover{background:var(--red-600)}
+.btn:active{transform:translateY(1px)}
+.btn:disabled{background:#94A3B8;box-shadow:none;cursor:progress}
+.btn svg{width:18px;height:18px;stroke:#fff;stroke-width:2.4;fill:none}
+.spin{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* result */
+#result{scroll-margin-top:84px}
+.result{margin-top:16px;border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--line);background:#fff;box-shadow:var(--shadow-lg);animation:pop .35s cubic-bezier(.2,.8,.2,1.1) both}
+@keyframes pop{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+.r-head{display:flex;align-items:center;gap:12px;padding:14px 18px;color:#fff}
+.ok .r-head{background:linear-gradient(135deg,#16A34A,#15803D)}
+.no .r-head{background:linear-gradient(135deg,#E11D2E,#B91C1C)}
+.r-head .seal{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.2);display:grid;place-items:center;flex-shrink:0}
+.r-head .seal svg{width:18px;height:18px;stroke:#fff;stroke-width:3;fill:none}
+.r-head b{font-size:15px;font-weight:600}
+body.bn .r-head b{font-size:16.5px}
+.r-body{padding:18px}
+.person{display:flex;gap:16px;align-items:center}
+.avatar{width:80px;height:80px;border-radius:18px;object-fit:cover;flex-shrink:0;border:3px solid #fff;box-shadow:0 0 0 2px var(--green-100),var(--shadow)}
+.avatar.ini{display:grid;place-items:center;background:var(--red);color:#fff;font-size:26px;font-weight:700}
+.person h3{font-size:19px;font-weight:700;letter-spacing:-.3px;line-height:1.25}
+.vsub{display:inline-flex;align-items:center;gap:5px;margin-top:6px;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600;background:var(--green-50);color:var(--green)}
+body.bn .vsub{font-size:13.5px}
+.vsub svg{width:12px;height:12px;stroke:currentColor;stroke-width:2.8;fill:none}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.fact{border:1px solid var(--line);border-radius:var(--r-sm);padding:10px 12px;position:relative}
+.fact.hit{border-color:#86EFAC;background:#FBFFFC}
+.fact .k{font-size:10.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+body.bn .fact .k{text-transform:none;letter-spacing:0;font-size:13px}
+.fact .v{font-size:15px;font-weight:600;margin-top:2px;word-break:break-all;font-family:var(--font)}
+.fact .v.bk{color:var(--bkash)}
+.fact .chk{position:absolute;top:9px;right:9px;width:18px;height:18px;border-radius:50%;background:var(--green-500);display:grid;place-items:center}
+.fact .chk svg{width:11px;height:11px;stroke:#fff;stroke-width:3.4;fill:none}
+.lvl{display:inline-flex;padding:2px 10px;border-radius:999px;font-size:12.5px;font-weight:600}
+.lvl-active{background:#DCFCE7;color:#166534}.lvl-rising{background:#1C1917;color:#FDE68A}.lvl-bronze{background:#FDE7D3;color:#9A3412}
+.lvl-silver{background:#EEF2F7;color:#475569}.lvl-gold{background:#FEF3C7;color:#854D0E}.lvl-platinum{background:#E0E7FF;color:#3730A3}
+.lvl-diamond{background:#CCFBF1;color:#0F766E}.lvl-titan{background:#0F172A;color:#38BDF8}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.act{height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:14px;font-weight:600;text-decoration:none;border:1.5px solid var(--line);background:#fff;color:var(--ink);text-align:center;padding:0 10px}
+body.bn .act{font-size:15px}
+.act:hover{background:#F8FAFC}
+.act.fb{background:#1877F2;border-color:#1877F2;color:#fff}
+.act.fb:hover{background:#166FE0}
+.act svg{width:17px;height:17px;flex-shrink:0}
+.act.only{grid-column:1/-1}
+.no-msg{font-size:14.5px;color:var(--ink-2);margin-bottom:14px}
+body.bn .no-msg{font-size:16px}
+.call{display:flex;align-items:center;gap:12px;background:var(--red-50);border:1px solid var(--red-100);border-radius:var(--r-md);padding:12px 14px;text-decoration:none}
+.call i{width:40px;height:40px;border-radius:12px;background:var(--red);display:grid;place-items:center;flex-shrink:0}
+.call i svg{width:18px;height:18px;stroke:#fff;stroke-width:2.2;fill:none}
+.call small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.6px}
+.call b{font-size:17px;font-weight:700;color:var(--red-600);font-family:var(--font)}
+
+/* sections */
+section.block{padding:40px 0}
+.sh{text-align:center;margin-bottom:26px}
+.sh p{font-size:12px;font-weight:600;color:var(--red);letter-spacing:1.2px;text-transform:uppercase}
+body.bn .sh p{letter-spacing:0;font-size:15px}
+.sh h2{font-size:clamp(22px,3vw,30px);font-weight:700;letter-spacing:-.6px;margin-top:4px}
+body.bn .sh h2{letter-spacing:0}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.step{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);padding:22px;box-shadow:var(--shadow)}
+.step .n{width:36px;height:36px;border-radius:11px;background:var(--red-50);color:var(--red);font-weight:700;display:grid;place-items:center;margin-bottom:14px}
+.step h3{font-size:16px;font-weight:600;margin-bottom:4px}
+.step p{font-size:14px;color:var(--muted)}
+body.bn .step h3{font-size:18px}
+body.bn .step p{font-size:15.5px}
+.tips{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.tip{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);padding:20px;box-shadow:var(--shadow)}
+.tip i{width:40px;height:40px;border-radius:12px;background:var(--red-50);display:grid;place-items:center;margin-bottom:14px}
+.tip i svg{width:19px;height:19px;stroke:var(--red);stroke-width:2;fill:none}
+.tip h3{font-size:15px;font-weight:600;margin-bottom:4px}
+.tip p{font-size:13.5px;color:var(--muted)}
+body.bn .tip h3{font-size:17px}
+body.bn .tip p{font-size:15px}
+
+footer{border-top:1px solid var(--line);background:#fff;margin-top:24px}
+footer .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:24px 20px;flex-wrap:wrap}
+footer .help{display:flex;align-items:center;gap:12px;text-decoration:none}
+footer .help i{width:44px;height:44px;border-radius:12px;background:var(--red-50);display:grid;place-items:center}
+footer .help i svg{width:19px;height:19px;stroke:var(--red);stroke-width:2.2;fill:none}
+footer .help small{display:block;font-size:13px;color:var(--muted);font-weight:500}
+body.bn footer .help small{font-size:15px}
+footer .help b{font-size:18px;font-weight:700;color:var(--red);font-family:var(--font)}
+footer .copy{font-size:12.5px;color:var(--muted);font-family:var(--font)}
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:#0B1220;color:#fff;padding:10px 16px;border-radius:12px;font-size:13.5px;font-weight:500;opacity:0;pointer-events:none;transition:all .25s;z-index:100}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (max-width:900px){
+  .hero{padding:32px 0 24px}
+  .hero .wrap{grid-template-columns:1fr;grid-template-areas:"title" "form" "notice";grid-template-rows:auto;row-gap:20px}
+  .notice{margin-top:4px}
+  .tips{grid-template-columns:1fr 1fr}
+}
+@media (max-width:600px){
+  .wrap{padding:0 16px}
+  .search{padding:18px}
+  .steps,.tips,.facts{grid-template-columns:1fr}
+  .person h3{font-size:17px}
+  .avatar{width:68px;height:68px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="brand" href="./"><img src="https://i.imgur.com/TPLibYw.png" alt=""><b>10 Minute School</b></a>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" id="l-en" aria-pressed="true" onclick="setLang('en')">English</button>
+      <button type="button" id="l-bn" aria-pressed="false" onclick="setLang('bn')">বাংলা</button>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="g-title">
+      <h1 data-i18n-html="h1">Affiliate <em>Verification</em> Portal</h1>
+      <p class="lede" data-i18n="lede">Verify someone is an official 10 Minute School affiliate before making any payment or sharing personal information.</p>
+    </div>
+
+    <div class="g-notice">
+      <div class="notice">
+        <div class="notice-top"><i></i><h2 data-i18n="noticeH">Important Notice</h2></div>
+        <p data-i18n-html="noticeP">If someone contacts you claiming to be from 10 Minute School, always verify their identity here before sending any money, sharing personal information, or making enrollment decisions. Only individuals shown as Verified here are official affiliates.</p>
+        <div class="warn">
+          <svg viewBox="0 0 24 24"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+          <p data-i18n="warn">WARNING: Never send money or share personal details without verifying first.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="g-form">
+      <form class="search" id="form" novalidate>
+        <h2 data-i18n="formTitle">Verify an Affiliate</h2>
+        <label for="q" data-i18n="label">bKash or Phone Number</label>
+        <div class="field" id="field">
+          <svg class="ico" viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/></svg>
+          <input id="q" name="q" type="tel" inputmode="tel" autocomplete="off" maxlength="20" placeholder="e.g. 01XXXXXXXXX">
+          <button type="button" class="clear" id="clear" aria-label="Clear"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+        </div>
+        <div class="hint" id="hint" aria-live="polite" data-i18n="hint">Enter their bKash number or registered phone number.</div>
+        <button class="btn" id="btn" type="submit">
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+          <span id="btn-l" data-i18n="verify">Verify Affiliate</span>
+        </button>
+      </form>
+      <div id="result" aria-live="polite"></div>
+    </div>
+  </div>
+</header>
+
+<section class="block">
+  <div class="wrap">
+    <div class="sh"><p data-i18n="howEy">How it works</p><h2 data-i18n="howH">Verify in 3 simple steps</h2></div>
+    <div class="steps">
+      <div class="step"><div class="n" data-i18n="n1">1</div><h3 data-i18n="s1h">Ask for Number</h3><p data-i18n="s1p">Ask for their bKash or registered phone number.</p></div>
+      <div class="step"><div class="n" data-i18n="n2">2</div><h3 data-i18n="s2h">Enter Number</h3><p data-i18n="s2p">Enter the number in the box above.</p></div>
+      <div class="step"><div class="n" data-i18n="n3">3</div><h3 data-i18n="s3h">Get Result</h3><p data-i18n="s3p">See their verified profile instantly.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" style="padding-top:8px">
+  <div class="wrap">
+    <div class="sh"><p data-i18n="fraudEy">Fraud prevention</p><h2 data-i18n="fraudH">Stay safe from scams</h2></div>
+    <div class="tips">
+      <div class="tip"><i><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></i><h3 data-i18n="f1h">Never Send Money First</h3><p data-i18n="f1p">Real affiliates never demand upfront payment.</p></div>
+      <div class="tip"><i><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></i><h3 data-i18n="f2h">Protect Personal Info</h3><p data-i18n="f2p">Never share your NID, passwords or bank details.</p></div>
+      <div class="tip"><i><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></i><h3 data-i18n="f3h">Report Suspicious Activity</h3><p data-i18n="f3p">Call our helpline immediately if something feels wrong.</p></div>
+      <div class="tip"><i><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></i><h3 data-i18n="f4h">Always Verify First</h3><p data-i18n="f4p">Use this portal every single time before trusting anyone.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <a class="help" href="tel:+8801896057968">
+      <i><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></i>
+      <div><small data-i18n="helpL">Need help? Contact the Affiliation Team</small><b>+880 1896-057968</b></div>
+    </a>
+    <p class="copy">© <span id="yr"></span> 10 Minute School</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API_URL      = "https://script.google.com/macros/s/AKfycbzQ_wqFe2qnINQ9C-WTdobdXc_dYzE-w9uncpCtkDew_ZTjbbicgNQW9wVHo5N0Ns3e/exec";
+const SECRET_TOKEN = "Speed&Scale";
+const HELPLINE     = "+880 1896-057968";
+
+// ── strings (copy from the v1 portal) ──────────────────────
+const T = {
+  en:{
+    h1:'Affiliate <em>Verification</em> Portal',
+    lede:'Before making any kind of payment or sharing personal information, make sure they are our verified affiliate.',
+    noticeH:'Important Notice',
+    noticeP:'If someone contacts you on behalf of 10 Minute School, always verify their identity on this portal before making a payment, enrolling, or sharing any personal information. Only people shown as <b>Verified</b> on this portal are our official affiliates.',
+    warn:'Never send money to anyone or share any personal data without verifying first.',
+    formTitle:'Verify an Affiliate', label:'bKash or Phone Number', ph:'e.g. 01XXXXXXXXX',
+    hint:'Enter the affiliate\'s bKash number or registered mobile number.',
+    eEmpty:'Number is required.', eBad:'Please enter a valid 11-digit number (01XXXXXXXXX).',
+    verify:'Verify', verifying:'Verifying...',
+    okH:'Official 10 Minute School Affiliate', verSub:'Verified Affiliate',
+    kCode:'Affiliate Code', kPhone:'Phone Number', kLevel:'Level', kBkash:'bKash Number',
+    fb:'View Facebook Profile', share:'Share Verified Card', copied:'Copied to clipboard!',
+    noH:'Verification Failed',
+    noMsg:'No verified affiliate was found with this number. Please double-check the details or contact our helpline.',
+    errMsg:'Could not connect right now. Please check your internet connection and try again.',
+    retry:'Try Again', helpline:'HELPLINE',
+    howEy:'How it works', howH:'Verify in 3 simple steps', n1:'1', n2:'2', n3:'3',
+    s1h:'Ask for Number', s1p:'Get the affiliate\'s bKash number or registered phone number.',
+    s2h:'Enter Number', s2p:'Enter the number in the box above.',
+    s3h:'Get Result', s3p:'See their verified profile instantly.',
+    fraudEy:'Safety guidelines', fraudH:'Stay alert to avoid scams',
+    f1h:'Never Send Money First', f1p:'Real affiliates never demand upfront payment.',
+    f2h:'Protect Personal Info', f2p:'Never share your NID, passwords or bank details.',
+    f3h:'Report Suspicious Activity', f3p:'If anything seems suspicious, call our helpline right away.',
+    f4h:'Always Verify First', f4p:'Before any transaction, always come to this portal and verify the number.',
+    helpL:'Need help? Contact the Affiliation Team',
+  },
+  bn:{
+    h1:'অ্যাফিলিয়েট <em>ভেরিফিকেশন</em> পোর্টাল',
+    lede:'কোনো ধরনের পেমেন্ট বা ব্যক্তিগত তথ্য শেয়ার করার আগে নিশ্চিত হয়ে নিন তিনি আমাদের ভেরিফাইড অ্যাফিলিয়েট কি না।',
+    noticeH:'গুরুত্বপূর্ণ নির্দেশনা',
+    noticeP:'টেন মিনিট স্কুলের পক্ষ থেকে কেউ আপনার সাথে যোগাযোগ করলে পেমেন্ট করা, ভর্তি হওয়া বা কোনো পার্সোনাল ইনফরমেশন শেয়ার করার আগে অবশ্যই এই পোর্টালে তার পরিচয় ভেরিফাই করে নিন। শুধুমাত্র এই পোর্টালে <b>Verified</b> দেখানো ব্যক্তিরাই আমাদের অফিসিয়াল অ্যাফিলিয়েট।',
+    warn:'ভেরিফাই না করে কাউকে টাকা পাঠাবেন না কিংবা কোনো পার্সোনাল ডেটা শেয়ার করবেন না।',
+    formTitle:'অ্যাফিলিয়েট ভেরিফাই করুন', label:'বিকাশ অথবা ফোন নম্বর', ph:'যেমন ০১XXXXXXXXX',
+    hint:'অ্যাফিলিয়েটের বিকাশ নম্বর বা রেজিস্টার্ড মোবাইল নম্বরটি লিখুন।',
+    eEmpty:'নম্বর প্রয়োজন।', eBad:'সঠিক ১১ সংখ্যার নম্বর দিন (০১XXXXXXXXX)।',
+    verify:'ভেরিফাই করুন', verifying:'ভেরিফাই হচ্ছে...',
+    okH:'অফিসিয়াল অ্যাফিলিয়েট', verSub:'যাচাইকৃত অ্যাফিলিয়েট',
+    kCode:'অ্যাফিলিয়েট কোড', kPhone:'ফোন নম্বর', kLevel:'লেভেল', kBkash:'বিকাশ নম্বর',
+    fb:'ফেসবুক প্রোফাইল দেখুন', share:'যাচাই কার্ড শেয়ার করুন', copied:'ক্লিপবোর্ডে কপি হয়েছে!',
+    noH:'যাচাই ব্যর্থ হয়েছে',
+    noMsg:'এই নম্বরের সাথে কোনো যাচাইকৃত অ্যাফিলিয়েট পাওয়া যায়নি। তথ্যগুলো আবার দেখুন অথবা হেল্পলাইনে যোগাযোগ করুন।',
+    errMsg:'এই মুহূর্তে সংযোগ করা যাচ্ছে না। ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।',
+    retry:'আবার চেষ্টা করুন', helpline:'হেল্পলাইন',
+    howEy:'কিভাবে কাজ করে', howH:'৩টি সহজ ধাপে যাচাই করুন', n1:'১', n2:'২', n3:'৩',
+    s1h:'নম্বর নিন', s1p:'অ্যাফিলিয়েটের বিকাশ নম্বর বা রেজিস্টার্ড ফোন নম্বরটি নিন।',
+    s2h:'নম্বর দিন', s2p:'উপরের বক্সে নম্বরটি দিন।',
+    s3h:'ফলাফল দেখুন', s3p:'তাৎক্ষণিকভাবে তাদের প্রোফাইল দেখুন।',
+    fraudEy:'নিরাপত্তা নির্দেশনা', fraudH:'প্রতারণা এড়াতে সতর্ক থাকুন',
+    f1h:'আগে টাকা পাঠাবেন না', f1p:'প্রকৃত অ্যাফিলিয়েটরা আগাম পেমেন্ট চায় না।',
+    f2h:'ব্যক্তিগত তথ্য রক্ষা করুন', f2p:'NID, পাসওয়ার্ড বা ব্যাংক তথ্য শেয়ার করবেন না।',
+    f3h:'সন্দেহজনক কার্যকলাপ রিপোর্ট করুন', f3p:'কোনো কিছু সন্দেহজনক মনে হলে সাথে সাথে আমাদের হেল্পলাইনে কল করুন।',
+    f4h:'সর্বদা আগে যাচাই করুন', f4p:'যেকোনো লেনদেনের আগে অবশ্যই এই পোর্টালে এসে নম্বরটি যাচাই করে নিন।',
+    helpL:'সহায়তা প্রয়োজন? অ্যাফিলিয়েশন টিমে যোগাযোগ করুন',
+  }
+};
+
+const LEVELS = {
+  'active':{c:'lvl-active',en:'Active',bn:'অ্যাক্টিভ'}, 'rising star':{c:'lvl-rising',en:'Rising Star',bn:'রাইজিং স্টার'},
+  'bronze':{c:'lvl-bronze',en:'Bronze',bn:'ব্রোঞ্জ'}, 'silver':{c:'lvl-silver',en:'Silver',bn:'সিলভার'},
+  'gold':{c:'lvl-gold',en:'Gold',bn:'গোল্ড'}, 'platinum':{c:'lvl-platinum',en:'Platinum',bn:'প্লাটিনাম'},
+  'diamond':{c:'lvl-diamond',en:'Diamond',bn:'ডায়মন্ড'}, 'titan':{c:'lvl-titan',en:'Titan',bn:'টাইটান'},
+};
+
+let lang = 'en', last = null;
+const $ = id => document.getElementById(id);
+const t = k => T[lang][k];
+
+// ── helpers ────────────────────────────────────────────────
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const bnDigits = s => String(s).replace(/[০-৯]/g, d => '০১২৩৪৫৬৭৮৯'.indexOf(d));
+// "+880 1821-767921", "৮৮০১৮২১৭৬৭৯২১", "1821767921" → "01821767921"
+function normPhone(v){
+  let d = bnDigits(v).replace(/\D/g,'');
+  if (d.startsWith('880')) d = d.slice(2); else if (d.startsWith('88')) d = d.slice(2);
+  if (d.length === 10 && d[0] === '1') d = '0' + d;
+  return d;
+}
+const isMobile = d => /^01[3-9]\d{8}$/.test(d);
+const fmtPhone = d => d.length === 11 ? d.slice(0,5) + '-' + d.slice(5) : d;
+const initials = n => String(n||'').split(/\s+/).filter(Boolean).map(w => w[0]).join('').slice(0,2).toUpperCase();
+
+// ── i18n ───────────────────────────────────────────────────
+function setLang(l){
+  lang = l;
+  document.documentElement.lang = l;
+  document.body.classList.toggle('bn', l === 'bn');
+  $('l-en').setAttribute('aria-pressed', l === 'en');
+  $('l-bn').setAttribute('aria-pressed', l === 'bn');
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = T[l][el.dataset.i18n]; });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => { el.innerHTML = T[l][el.dataset.i18nHtml]; });
+  $('q').placeholder = t('ph');
+  if (last) render(last);
+  try { localStorage.setItem('lang', l); } catch(_) {}
+}
+
+function setHint(key, bad){
+  const h = $('hint');
+  h.textContent = t(key);
+  h.dataset.i18n = key;
+  h.classList.toggle('bad', !!bad);
+  $('q').classList.toggle('err', !!bad);
+}
+
+// ── verify ─────────────────────────────────────────────────
+async function verify(raw){
+  const n = normPhone(raw);
+  if (!n) { setHint('eEmpty', true); $('q').focus(); return; }
+  if (!isMobile(n)) { setHint('eBad', true); $('q').focus(); return; }
+  setHint('hint', false);
+
+  const btn = $('btn');
+  btn.disabled = true;
+  btn.firstElementChild.outerHTML = '<span class="spin"></span>';
+  $('btn-l').textContent = t('verifying');
+
+  let res;
+  try {
+    const data = await lookup(n);
+    if (data && data.found && data.affiliate) res = {state:'ok', a:data.affiliate, by:data.matchedBy, query:n};
+    else if (data && data.ok === false) res = {state:'error', query:n};
+    else res = {state:'no', query:n};
+  } catch (e) {
+    res = {state:'error', query:n};
+  } finally {
+    btn.disabled = false;
+    btn.firstElementChild.outerHTML = '<svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>';
+    $('btn-l').textContent = t('verify');
+  }
+  last = res;
+  render(res);
+  history.replaceState(null, '', '?q=' + n + (lang === 'bn' ? '&lang=bn' : '') + (DEMO ? '&demo=1' : ''));
+  $('result').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+async function lookup(number){
+  if (DEMO) return demoLookup(number);
+  const r = await fetch(API_URL, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify({query:number, token:SECRET_TOKEN})});
+  return r.json();
+}
+
+// ── render ─────────────────────────────────────────────────
+const ICON_CHECK = '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+const ICON_X = '<svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>';
+const ICON_PHONE = '<svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>';
+
+function render(r){
+  const box = $('result');
+  if (r.state === 'ok') {
+    const a = r.a, lv = LEVELS[String(a.level||'').toLowerCase().trim()] || {c:'lvl-silver', en:a.level, bn:a.level};
+    const fact = (key, valHtml, hit, cls='') => !valHtml ? '' :
+      `<div class="fact${hit?' hit':''}"><div class="k">${esc(t(key))}</div><div class="v ${cls}">${valHtml}</div>${hit?`<span class="chk">${ICON_CHECK}</span>`:''}</div>`;
+    const avatar = a.picture
+      ? `<img class="avatar" src="${esc(a.picture)}" alt="${esc(a.name)}" referrerpolicy="no-referrer" onerror="this.outerHTML='<div class=&quot;avatar ini&quot;>${esc(initials(a.name))}</div>'">`
+      : `<div class="avatar ini">${esc(initials(a.name))}</div>`;
+    box.innerHTML = `
+      <div class="result ok">
+        <div class="r-head"><span class="seal">${ICON_CHECK}</span><b>${esc(t('okH'))}</b></div>
+        <div class="r-body">
+          <div class="person">${avatar}
+            <div><h3>${esc(a.name)}</h3><span class="vsub">${ICON_CHECK}${esc(t('verSub'))}</span></div>
+          </div>
+          <div class="facts">
+            ${fact('kBkash', a.bkash && esc(fmtPhone(normPhone(a.bkash))), r.by==='bkash', 'bk')}
+            ${fact('kPhone', a.phone && esc(fmtPhone(normPhone(a.phone))), r.by==='phone')}
+            ${fact('kCode', a.affiliateCode && esc(a.affiliateCode), false)}
+            ${fact('kLevel', lv[lang] && `<span class="lvl ${lv.c}">${esc(lv[lang])}</span>`, false)}
+          </div>
+          <div class="actions">
+            ${a.facebook?`<a class="act fb" href="${esc(a.facebook)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="#fff"><path d="M14 8V6.5c0-.7.5-1 1-1h2V2h-3c-3 0-4 2-4 4.5V8H8v3.5h2V22h4V11.5h2.7L17 8h-3z"/></svg>${esc(t('fb'))}</a>`:''}
+            <button type="button" class="act${a.facebook?'':' only'}" onclick="shareCard()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>${esc(t('share'))}</button>
+          </div>
+        </div>
+      </div>`;
+    confetti();
+  } else {
+    const isErr = r.state === 'error';
+    box.innerHTML = `
+      <div class="result no">
+        <div class="r-head"><span class="seal">${ICON_X}</span><b>${esc(t('noH'))}</b></div>
+        <div class="r-body">
+          <p class="no-msg">${esc(t(isErr ? 'errMsg' : 'noMsg'))}</p>
+          ${isErr ? `<button type="button" class="btn" style="margin-bottom:12px" onclick="verify($('q').value)">${esc(t('retry'))}</button>` : ''}
+          <a class="call" href="tel:${HELPLINE.replace(/[^\d+]/g,'')}"><i>${ICON_PHONE}</i><div><small>${esc(t('helpline'))}</small><b>${HELPLINE}</b></div></a>
+        </div>
+      </div>`;
+  }
+}
+
+function shareCard(){
+  if (!last || last.state !== 'ok') return;
+  const a = last.a, lv = LEVELS[String(a.level||'').toLowerCase().trim()];
+  const lvl = lv ? lv[lang] : a.level;
+  const url = location.origin + location.pathname + '?q=' + last.query;
+  const txt = lang === 'bn'
+    ? `✅ যাচাইকৃত ১০ মিনিট স্কুল অ্যাফিলিয়েট\n👤 ${a.name}\n🆔 কোড: ${a.affiliateCode}\n🏅 লেভেল: ${lvl}\n\nযাচাই করুন: ${url}`
+    : `✅ Verified 10 Minute School Affiliate\n👤 ${a.name}\n🆔 Code: ${a.affiliateCode}\n🏅 Level: ${lvl}\n\nVerify at: ${url}`;
+  if (navigator.share) navigator.share({title:'Verified Affiliate', text:txt}).catch(()=>{});
+  else if (navigator.clipboard) navigator.clipboard.writeText(txt).then(() => toast(t('copied')));
+}
+
+function toast(msg){ const el = $('toast'); el.textContent = msg; el.classList.add('show'); setTimeout(() => el.classList.remove('show'), 1800); }
+
+function confetti(){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const cv = document.createElement('canvas'); cv.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:99';
+  document.body.appendChild(cv); const cx = cv.getContext('2d');
+  cv.width = innerWidth; cv.height = innerHeight;
+  const cols = ['#E11D2E','#16A34A','#F59E0B','#2563EB','#E2136E'];
+  const P = Array.from({length:90}, () => ({x:Math.random()*cv.width, y:-20-Math.random()*cv.height*.5, w:6+Math.random()*6, h:3+Math.random()*3, c:cols[Math.random()*cols.length|0], r:Math.random()*6, s:(Math.random()-.5)*.25, vy:2.5+Math.random()*2.5, vx:(Math.random()-.5)*1.6, o:1}));
+  (function f(){ cx.clearRect(0,0,cv.width,cv.height); let alive = false;
+    P.forEach(p => { p.y+=p.vy; p.x+=p.vx; p.r+=p.s; if (p.y > cv.height*.7) p.o -= .03; if (p.o > 0) alive = true;
+      cx.save(); cx.globalAlpha = Math.max(0,p.o); cx.translate(p.x,p.y); cx.rotate(p.r); cx.fillStyle = p.c; cx.fillRect(-p.w/2,-p.h/2,p.w,p.h); cx.restore(); });
+    alive ? requestAnimationFrame(f) : cv.remove(); })();
+}
+
+// ── demo mode (?demo=1): fake data, no network — for previewing the design ──
+const DEMO = new URLSearchParams(location.search).has('demo');
+const DEMO_ROWS = [
+  {name:'Rahim Uddin', affiliateCode:'V2UNK0000DEMO', phone:'01700000001', level:'Gold', facebook:'https://www.facebook.com/', picture:'', bkash:'01800000001'},
+];
+async function demoLookup(n){
+  await new Promise(r => setTimeout(r, 600));
+  for (const a of DEMO_ROWS) {
+    if (normPhone(a.bkash) === n) return {found:true, matchedBy:'bkash', affiliate:a};
+    if (normPhone(a.phone) === n) return {found:true, matchedBy:'phone', affiliate:a};
+  }
+  return {found:false};
+}
+
+// ── wire up ────────────────────────────────────────────────
+$('q').addEventListener('input', () => {
+  $('field').classList.toggle('has', !!$('q').value);
+  if ($('hint').classList.contains('bad')) setHint('hint', false);
+});
+$('clear').addEventListener('click', () => { $('q').value = ''; $('field').classList.remove('has'); setHint('hint', false); $('q').focus(); });
+$('form').addEventListener('submit', e => { e.preventDefault(); verify($('q').value); });
+$('yr').textContent = new Date().getFullYear();
+
+(function init(){
+  const p = new URLSearchParams(location.search);
+  let l = p.get('lang'); if (!l) { try { l = localStorage.getItem('lang'); } catch(_) {} }
+  setLang(l === 'bn' ? 'bn' : 'en');
+  const q = p.get('q');
+  if (q) { $('q').value = q; $('field').classList.add('has'); verify(q); }
+})();
+</script>
+</body>
+</html>
